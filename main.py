@@ -7,9 +7,9 @@ filtros = {}
 
 opcoes = [
     'Entrada de estoque',
-      'Consultar produtos',
-        'Saída de estoque',
-          'Sair'
+    'Consultar produtos',
+    'Saída de estoque',
+    'Sair'
 ]
 
 while True:

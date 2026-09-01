@@ -1,4 +1,5 @@
-from interface import menu_dicio
+from interface import menu_dicio, leiaInt, escreveLinha
+from dados import opcoes_status
 
 def filtrar_produtos(estoque, filtros):
     resultado = []
@@ -65,6 +66,26 @@ def escolher_filtros(possibilidades):
         escolhas[valor] = ''
 
     for campo in escolhas:
-        escolhas[campo] = input(f'{campo}: ') 
+        if campo == 'Status':
+            escolhas[campo] = escolher_status(opcoes_status)
+        else:
+            escolhas[campo] = input(f'{campo}: ')
 
     return escolhas
+
+
+def escolher_status(lista):
+    escreveLinha()
+    print('Campo de Status')
+    c = 1
+    for item in lista:
+        print(f'[{c}] {item}')
+        c += 1
+    print()
+    opcao = leiaInt('Sua opção: ')
+    while True:
+        if opcao < 1 or opcao > len(lista):
+            print('\nERRO: Por favor, digite apenas opções válidas!\n')
+            opcao = leiaInt('Sua opção: ')
+        else:
+            return lista[opcao-1]

@@ -52,3 +52,10 @@ opcoes_filtro = {
     3: 'Categoria',
     4: 'Status'
 }
+
+
+opcoes_status = [
+    'DISPONÍVEL', 
+    'ESGOTADO', 
+    'INATIVO'
+]
