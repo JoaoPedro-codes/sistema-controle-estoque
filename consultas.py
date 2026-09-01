@@ -70,22 +70,23 @@ def escolher_filtros(possibilidades):
             escolhas[campo] = escolher_status(opcoes_status)
         else:
             escolhas[campo] = input(f'{campo}: ')
+            print()
 
     return escolhas
 
 
 def escolher_status(lista):
-    escreveLinha()
-    print('Campo de Status')
+    print('Escolha o Status:')
+    print()
     c = 1
     for item in lista:
         print(f'[{c}] {item}')
         c += 1
     print()
-    opcao = leiaInt('Sua opção: ')
+    opcao = leiaInt('Status: ')
     while True:
         if opcao < 1 or opcao > len(lista):
             print('\nERRO: Por favor, digite apenas opções válidas!\n')
-            opcao = leiaInt('Sua opção: ')
+            opcao = leiaInt('Status: ')
         else:
             return lista[opcao-1]
