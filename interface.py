@@ -49,8 +49,10 @@ def menu_dicio(dicio, msg, msg_opcao):
     print()
     print('Campos de filtragem:')
     print()
+    print(f'[0] Consultar Todos')
     for chave, valor in dicio.items():
         print(f'[{chave}] {valor}')
+    print(f'[5] Voltar ao menu principal')
     print()
     escolha = input(msg_opcao)
     escolha_com_espaco = escolha.replace(',', ' ')

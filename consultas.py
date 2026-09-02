@@ -52,18 +52,36 @@ def escolher_filtros(possibilidades):
                     escolhaInt.append(filtro)
 
         if valido:
-            for v in escolhaInt:
-                if v not in possibilidades:
-                    print('\nERRO: Por favor, digite apenas opções válidas!\n')
-                    sleep(1)
-                    valido = False
-                    break
+                for v in escolhaInt:
+                    if v not in [0, 1, 2, 3, 4, 5]:
+                        print('\nERRO: Por favor, digite apenas opções válidas!\n')
+                        sleep(1)
+                        valido = False
+                        break
 
+                if len(escolhaInt) == 1 and escolhaInt[0] == 5:
+                    return 5
+                else:
+                    if len(escolhaInt) > 1 and 5 in escolhaInt:
+                        print('\nERRO: Por favor, digite apenas opções válidas!\n')
+                        sleep(1)
+                        valido = False
+
+                if len(escolhaInt) == 1 and escolhaInt[0] == 0:
+                    return {}
+                else:
+                    if len(escolhaInt) > 1 and 0 in escolhaInt:
+                        print('\nERRO: Por favor, digite apenas opções válidas!\n')
+                        sleep(1)
+                        valido = False
+        
         if valido:
             break
 
     for num in escolhaInt:
+        
         escolhas_lista.append(possibilidades[num])
+       
 
     for valor in escolhas_lista:
         escolhas[valor] = ''
