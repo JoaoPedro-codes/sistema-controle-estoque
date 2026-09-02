@@ -2,6 +2,7 @@ from time import sleep
 from interface import menu, titulo, detalhes_produto, mostrar_resultados
 from consultas import escolher_filtros, filtrar_produtos
 from dados import estoque, opcoes_filtro
+from operacoes import inativar_produto
 
 filtros = {}
 
@@ -24,12 +25,21 @@ while True:
             else:
                 filtros = escolher_filtros(opcoes_filtro)
                 codigos = filtrar_produtos(estoque, filtros)
-                print()
                 if len(codigos) == 0:
                     print('Nenhum produto encontrado')
+                    sleep(1)
                 elif len(codigos) == 1:
                     escolha = detalhes_produto(estoque, codigos[0])
-                    if escolha == 3:
+                    print()
+                    if escolha == 2:
+                        inativo = inativar_produto(estoque, codigos[0])
+                        if inativo == 0:
+                            print('Ir para saída de estoque')
+                        elif inativo == 1:
+                            continue
+                        elif inativo == 2:
+                            continue
+                    elif escolha == 3:
                         continue
                     elif escolha == 4:
                         break
@@ -40,7 +50,16 @@ while True:
                             break
                         else:
                             escolha = detalhes_produto(estoque, retorno)
-                            if escolha == 3:
+                            print()
+                            if escolha == 2:
+                                inativo = inativar_produto(estoque, retorno)
+                                if inativo == 0:
+                                    print('Ir para saída de estoque')
+                                elif inativo == 1:
+                                    continue
+                                elif inativo == 2:
+                                    continue
+                            elif escolha == 3:
                                 continue
                             elif escolha == 4:
                                 break
@@ -50,5 +69,4 @@ while True:
     elif opcao == 4:
         print('Finalizando o programa...')
         break
-    sleep(1)
     

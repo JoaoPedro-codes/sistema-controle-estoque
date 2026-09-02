@@ -1,3 +1,4 @@
+from time import sleep
 from interface import menu_dicio, leiaInt, escreveLinha
 from dados import opcoes_status
 
@@ -28,7 +29,6 @@ def filtrar_produtos(estoque, filtros):
 def escolher_filtros(possibilidades):
     while True:
         escolha_separada = menu_dicio(possibilidades, 'Consultar produtos'.upper(), 'Digite os filtros desejados separados por vírgula:\nR: ')
-        print()
         escolhaInt = []
         escolhas_lista = []
         escolhas = {}
@@ -36,6 +36,7 @@ def escolher_filtros(possibilidades):
 
         if not escolha_separada:
             print('\nERRO: Por favor, digite apenas opções válidas!\n')
+            sleep(1)
             valido = False
 
         if valido:
@@ -44,6 +45,7 @@ def escolher_filtros(possibilidades):
                     filtro = int(escolha_separada[i])
                 except (ValueError, TypeError):
                     print('\nERRO: Por favor, digite apenas opções válidas!\n')
+                    sleep(1)
                     valido = False
                     break
                 else:  
@@ -53,6 +55,7 @@ def escolher_filtros(possibilidades):
             for v in escolhaInt:
                 if v not in possibilidades:
                     print('\nERRO: Por favor, digite apenas opções válidas!\n')
+                    sleep(1)
                     valido = False
                     break
 
@@ -67,10 +70,11 @@ def escolher_filtros(possibilidades):
 
     for campo in escolhas:
         if campo == 'Status':
+            print()
             escolhas[campo] = escolher_status(opcoes_status)
         else:
-            escolhas[campo] = input(f'{campo}: ')
             print()
+            escolhas[campo] = input(f'{campo}: ')
 
     return escolhas
 

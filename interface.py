@@ -1,4 +1,5 @@
 import os
+from time import sleep
 
 def limpar_tela():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -19,6 +20,7 @@ def leiaInt(opc):
              opcao = int(input((opc))) 
         except (ValueError, TypeError):
             print('\nERRO: Por favor, digite apenas opções válidas!\n')
+            sleep(1)
         else:
             return opcao
         
