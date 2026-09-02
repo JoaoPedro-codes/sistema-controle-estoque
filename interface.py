@@ -1,3 +1,8 @@
+import os
+
+def limpar_tela():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
 def escreveLinha(num=42):
     print('='*num)
 
@@ -19,6 +24,7 @@ def leiaInt(opc):
         
 
 def menu(lista, msg):
+    limpar_tela()
     titulo(msg)
     print()
     c = 1
@@ -36,6 +42,7 @@ def menu(lista, msg):
 
 
 def menu_dicio(dicio, msg, msg_opcao):
+    limpar_tela()
     titulo(msg)
     print()
     print('Campos de filtragem:')
@@ -50,6 +57,7 @@ def menu_dicio(dicio, msg, msg_opcao):
 
 
 def detalhes_produto(dicio, codigo):
+    limpar_tela()
     titulo('DETALHES DO PRODUTO')
     print()
     print(f'{"Código:":<18}{codigo}')
@@ -80,6 +88,7 @@ def detalhes_produto(dicio, codigo):
 
 
 def mostrar_resultados(dicio, lista):
+    limpar_tela()
     titulo('PRODUTOS ENCONTRADOS')
     print()
     c = 1

@@ -31,7 +31,8 @@ while True:
                     escolha = detalhes_produto(estoque, codigos[0])
                     if escolha == 3:
                         continue
-                    
+                    elif escolha == 4:
+                        break
                 else:
                     while True:
                         retorno = mostrar_resultados(estoque, codigos)
