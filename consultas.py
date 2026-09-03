@@ -1,5 +1,4 @@
-from time import sleep
-from interface import menu_dicio, leiaInt, escreveLinha
+from interface import leiaInt, limpar_tela, titulo
 from dados import opcoes_status
 
 def filtrar_produtos(estoque, filtros):
@@ -26,9 +25,21 @@ def filtrar_produtos(estoque, filtros):
     return resultado
 
 
-def escolher_filtros(possibilidades):
+def escolher_filtros(possibilidades, msg, msg_opcao):
+    limpar_tela()
+    titulo(msg)
+    print()
+    print('Campos de filtragem:')
+    print()
+    print(f'[0] Consultar Todos')
+    for chave, valor in possibilidades.items():
+        print(f'[{chave}] {valor}')
+    print(f'[5] Voltar ao menu principal')
+    print()
     while True:
-        escolha_separada = menu_dicio(possibilidades, 'Consultar produtos'.upper(), 'Digite os filtros desejados separados por vírgula:\nR: ')
+        escolha = input(msg_opcao)
+        escolha_com_espaco = escolha.replace(',', ' ')
+        escolha_separada = escolha_com_espaco.split()
         escolhaInt = []
         escolhas_lista = []
         escolhas = {}
@@ -36,7 +47,6 @@ def escolher_filtros(possibilidades):
 
         if not escolha_separada:
             print('\nERRO: Por favor, digite apenas opções válidas!\n')
-            sleep(1)
             valido = False
 
         if valido:
@@ -45,7 +55,6 @@ def escolher_filtros(possibilidades):
                     filtro = int(escolha_separada[i])
                 except (ValueError, TypeError):
                     print('\nERRO: Por favor, digite apenas opções válidas!\n')
-                    sleep(1)
                     valido = False
                     break
                 else:  
@@ -55,36 +64,31 @@ def escolher_filtros(possibilidades):
                 for v in escolhaInt:
                     if v not in [0, 1, 2, 3, 4, 5]:
                         print('\nERRO: Por favor, digite apenas opções válidas!\n')
-                        sleep(1)
                         valido = False
                         break
-
                 if len(escolhaInt) == 1 and escolhaInt[0] == 5:
                     return 5
                 else:
                     if len(escolhaInt) > 1 and 5 in escolhaInt:
                         print('\nERRO: Por favor, digite apenas opções válidas!\n')
-                        sleep(1)
                         valido = False
-
                 if len(escolhaInt) == 1 and escolhaInt[0] == 0:
                     return {}
                 else:
                     if len(escolhaInt) > 1 and 0 in escolhaInt:
                         print('\nERRO: Por favor, digite apenas opções válidas!\n')
-                        sleep(1)
                         valido = False
         
         if valido:
             break
 
     for num in escolhaInt:
-        
         escolhas_lista.append(possibilidades[num])
        
-
     for valor in escolhas_lista:
         escolhas[valor] = ''
+
+    limpar_tela()
 
     for campo in escolhas:
         if campo == 'Status':

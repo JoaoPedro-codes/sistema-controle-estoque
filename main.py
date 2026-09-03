@@ -23,14 +23,15 @@ while True:
             if escolha == 4:
                 break
             else:
-                filtros = escolher_filtros(opcoes_filtro)
+                filtros = escolher_filtros(opcoes_filtro, 'Consultar produtos'.upper(), 'Digite os filtros desejados separados por vírgula:\nR: ')
                 if filtros == 5:
                     break
                 else:
                     codigos = filtrar_produtos(estoque, filtros)
                     if len(codigos) == 0:
+                        print()
                         print('Nenhum produto encontrado')
-                        sleep(1)
+                        sleep(2)
                     elif len(codigos) == 1:
                         escolha = detalhes_produto(estoque, codigos[0])
                         print()

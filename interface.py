@@ -1,8 +1,8 @@
 import os
-from time import sleep
 
 def limpar_tela():
     os.system('cls' if os.name == 'nt' else 'clear')
+
 
 def escreveLinha(num=42):
     print('='*num)
@@ -20,7 +20,6 @@ def leiaInt(opc):
              opcao = int(input((opc))) 
         except (ValueError, TypeError):
             print('\nERRO: Por favor, digite apenas opções válidas!\n')
-            sleep(1)
         else:
             return opcao
         
@@ -41,23 +40,6 @@ def menu(lista, msg):
             opcao = leiaInt('Sua opção: ')
         else:
             return opcao
-
-
-def menu_dicio(dicio, msg, msg_opcao):
-    limpar_tela()
-    titulo(msg)
-    print()
-    print('Campos de filtragem:')
-    print()
-    print(f'[0] Consultar Todos')
-    for chave, valor in dicio.items():
-        print(f'[{chave}] {valor}')
-    print(f'[5] Voltar ao menu principal')
-    print()
-    escolha = input(msg_opcao)
-    escolha_com_espaco = escolha.replace(',', ' ')
-    escolha_separada = escolha_com_espaco.split()
-    return escolha_separada
 
 
 def detalhes_produto(dicio, codigo):
