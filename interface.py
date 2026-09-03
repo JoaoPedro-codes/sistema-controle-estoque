@@ -17,7 +17,7 @@ def titulo(msg):
 def leiaInt(opc):
     while True:
         try:
-             opcao = int(input((opc))) 
+             opcao = int(input(opc)) 
         except (ValueError, TypeError):
             print('\nERRO: Por favor, digite apenas opções válidas!\n')
         else:

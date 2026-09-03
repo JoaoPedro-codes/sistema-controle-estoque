@@ -54,6 +54,14 @@ opcoes_filtro = {
 }
 
 
+opcoes_alteracao = {
+    1: 'Tipo',
+    2: 'Marca',
+    3: 'Categoria',
+    4: 'Preço'
+}
+
+
 opcoes_status = [
     'DISPONÍVEL', 
     'ESGOTADO', 

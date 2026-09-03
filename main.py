@@ -1,8 +1,8 @@
 from time import sleep
 from interface import menu, titulo, detalhes_produto, mostrar_resultados
 from consultas import escolher_filtros, filtrar_produtos
-from dados import estoque, opcoes_filtro
-from operacoes import inativar_produto
+from dados import estoque, opcoes_filtro, opcoes_alteracao
+from operacoes import inativar_produto, alterar_cadastro
 
 filtros = {}
 
@@ -23,7 +23,7 @@ while True:
             if escolha == 4:
                 break
             else:
-                filtros = escolher_filtros(opcoes_filtro, 'Consultar produtos'.upper(), 'Digite os filtros desejados separados por vírgula:\nR: ')
+                filtros = escolher_filtros(opcoes_filtro, opcoes[1].upper(), 'Digite as numerações correnspondentes aos filtros desejados separando-as por vírgula:\nR: ')
                 if filtros == 5:
                     break
                 else:
@@ -33,40 +33,52 @@ while True:
                         print('Nenhum produto encontrado')
                         sleep(2)
                     elif len(codigos) == 1:
-                        escolha = detalhes_produto(estoque, codigos[0])
-                        print()
-                        if escolha == 2:
-                            inativo = inativar_produto(estoque, codigos[0])
-                            if inativo == 0:
-                                print('Ir para saída de estoque')
-                            elif inativo == 1:
-                                continue
-                            elif inativo == 2:
-                                continue
-                        elif escolha == 3:
-                            continue
-                        elif escolha == 4:
-                            break
+                        while True:
+                            escolha = detalhes_produto(estoque, codigos[0])
+                            print()
+                            if escolha == 1:
+                                opcoes_alterar = alterar_cadastro(opcoes_alteracao, 'Alterar cadastro', 'Digite as numerações correnspondentes aos campos desejados separando-as por vírgula:\nR: ', estoque, codigos[0])
+                                if opcoes_alterar == 5:
+                                    continue
+                            if escolha == 2:
+                                inativo = inativar_produto(estoque, codigos[0])
+                                if inativo == 0:
+                                    print('Ir para saída de estoque')
+                                elif inativo == 1:
+                                    continue
+                                elif inativo == 2:
+                                    continue
+                            elif escolha == 3:
+                                break
+                            elif escolha == 4:
+                                break
                     else:
                         while True:
+                            if escolha == 4:
+                                break
                             retorno = mostrar_resultados(estoque, codigos)
                             if retorno == 0:
                                 break
                             else:
-                                escolha = detalhes_produto(estoque, retorno)
-                                print()
-                                if escolha == 2:
-                                    inativo = inativar_produto(estoque, retorno)
-                                    if inativo == 0:
-                                        print('Ir para saída de estoque')
-                                    elif inativo == 1:
-                                        continue
-                                    elif inativo == 2:
-                                        continue
-                                elif escolha == 3:
-                                    continue
-                                elif escolha == 4:
-                                    break
+                                while True:
+                                    escolha = detalhes_produto(estoque, retorno)
+                                    print()
+                                    if escolha == 1:
+                                        opcoes_alterar = alterar_cadastro(opcoes_alteracao, 'Alterar cadastro', 'Digite as numerações correnspondentes aos campos desejados separando-as por vírgula:\nR: ', estoque, retorno)
+                                        if opcoes_alterar == 5:
+                                            continue
+                                    elif escolha == 2:
+                                        inativo = inativar_produto(estoque, retorno)
+                                        if inativo == 0:
+                                            print('Ir para saída de estoque')
+                                        elif inativo == 1:
+                                            continue
+                                        elif inativo == 2:
+                                            continue
+                                    elif escolha == 3:
+                                        break
+                                    elif escolha == 4:
+                                        break
                             
     elif opcao == 3:
         titulo(opcoes[2].upper())
