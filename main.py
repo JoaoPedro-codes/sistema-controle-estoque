@@ -48,6 +48,7 @@ while True:
                                 if inativo == 0:
                                     print('Ir para saída de estoque')
                                 elif inativo == 1:
+                                    salvar_estoque(estoque)
                                     continue
                                 elif inativo == 2:
                                     continue
@@ -77,6 +78,7 @@ while True:
                                         if inativo == 0:
                                             print('Ir para saída de estoque')
                                         elif inativo == 1:
+                                            salvar_estoque(estoque)
                                             continue
                                         elif inativo == 2:
                                             continue
