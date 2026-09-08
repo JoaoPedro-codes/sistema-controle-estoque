@@ -122,3 +122,5 @@ def alterar_cadastro(possibilidades, msg, msg_opcao, estoque, codigo):
 
     for campo, informacao in mudancas.items():
         estoque[codigo][campo] = informacao
+
+    return 0

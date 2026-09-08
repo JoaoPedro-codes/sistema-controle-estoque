@@ -1,0 +1,5 @@
+1;Arroz;Camil;Alimentos;20;25.9;DISPONÍVEL
+2;Arroz;Tio João;Alimentos;12;27.5;DISPONÍVEL
+3;Feijão;Camil;Alimentos;0;8.9;ESGOTADO
+4;Detergente;Ypê;Limpeza;15;3.49;DISPONÍVEL
+5;Arroz;Prato Fino;Alimentos;0;23.9;INATIVO

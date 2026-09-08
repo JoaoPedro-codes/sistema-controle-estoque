@@ -1,7 +1,7 @@
 from time import sleep
 from interface import menu, titulo, detalhes_produto, mostrar_resultados
 from consultas import escolher_filtros, filtrar_produtos
-from dados import estoque, opcoes_filtro, opcoes_alteracao
+from dados import carregar_estoque, salvar_estoque, opcoes_filtro, opcoes_alteracao
 from operacoes import inativar_produto, alterar_cadastro
 
 filtros = {}
@@ -12,6 +12,7 @@ opcoes = [
     'Saída de estoque',
     'Sair'
 ]
+estoque = carregar_estoque()
 
 while True:
     opcao = menu(opcoes, 'SISTEMA DE ESTOQUE')
@@ -37,9 +38,11 @@ while True:
                             escolha = detalhes_produto(estoque, codigos[0])
                             print()
                             if escolha == 1:
-                                opcoes_alterar = alterar_cadastro(opcoes_alteracao, 'Alterar cadastro', 'Digite as numerações correnspondentes aos campos desejados separando-as por vírgula:\nR: ', estoque, codigos[0])
+                                opcoes_alterar = alterar_cadastro(opcoes_alteracao, 'ALTERAR CADASTRO', 'Digite as numerações correnspondentes aos campos desejados separando-as por vírgula:\nR: ', estoque, codigos[0])
                                 if opcoes_alterar == 5:
                                     continue
+                                if opcoes_alterar == 0:
+                                    salvar_estoque(estoque)
                             if escolha == 2:
                                 inativo = inativar_produto(estoque, codigos[0])
                                 if inativo == 0:
@@ -64,9 +67,11 @@ while True:
                                     escolha = detalhes_produto(estoque, retorno)
                                     print()
                                     if escolha == 1:
-                                        opcoes_alterar = alterar_cadastro(opcoes_alteracao, 'Alterar cadastro', 'Digite as numerações correnspondentes aos campos desejados separando-as por vírgula:\nR: ', estoque, retorno)
+                                        opcoes_alterar = alterar_cadastro(opcoes_alteracao, 'ALTERAR CADASTRO', 'Digite as numerações correnspondentes aos campos desejados separando-as por vírgula:\nR: ', estoque, retorno)
                                         if opcoes_alterar == 5:
                                             continue
+                                        if opcoes_alterar == 0:
+                                            salvar_estoque(estoque)
                                     elif escolha == 2:
                                         inativo = inativar_produto(estoque, retorno)
                                         if inativo == 0:

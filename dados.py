@@ -1,49 +1,38 @@
-estoque = {
-    1: {
-        'Tipo': 'Arroz',
-        'Marca': 'Camil',
-        'Categoria': 'Alimentos',
-        'Quantidade': 20,
-        'Preço': 25.90,
-        'Status': 'DISPONÍVEL'
-    },
+def carregar_estoque():
+    estoque = {}
 
-    2: {
-        'Tipo': 'Arroz',
-        'Marca': 'Tio João',
-        'Categoria': 'Alimentos',
-        'Quantidade': 12,
-        'Preço': 27.50,
-        'Status': 'DISPONÍVEL'
-    },
+    try:
+        with open('estoque.txt', 'r', encoding='utf-8') as arquivo:
+            for linha in arquivo:
+                termos = linha.strip().split(';')
+                
+                codigo = int(termos[0])
+                quantidade = int(termos[4])
+                preco = float(termos[5])
 
-    3: {
-        'Tipo': 'Feijão',
-        'Marca': 'Camil',
-        'Categoria': 'Alimentos',
-        'Quantidade': 0,
-        'Preço': 8.90,
-        'Status': 'ESGOTADO'
-    },
+                estoque[codigo] = {
+                    'Tipo': termos[1],
+                    'Marca': termos[2],
+                    'Categoria': termos[3],
+                    'Quantidade': quantidade,
+                    'Preço': preco,
+                    'Status': termos[6]
+                }
 
-    4: {
-        'Tipo': 'Detergente',
-        'Marca': 'Ypê',
-        'Categoria': 'Limpeza',
-        'Quantidade': 15,
-        'Preço': 3.49,
-        'Status': 'DISPONÍVEL'
-    },
+    except FileNotFoundError:
+        pass
 
-    5: {
-        'Tipo': 'Arroz',
-        'Marca': 'Prato Fino',
-        'Categoria': 'Alimentos',
-        'Quantidade': 0,
-        'Preço': 23.90,
-        'Status': 'INATIVO'
-    }
-}
+    return estoque
+
+
+def salvar_estoque(estoque):
+    with open('estoque.txt', 'w', encoding='utf-8') as arquivo:
+        for codigo, produto in estoque.items():
+            arquivo.write(
+                f"{codigo};{produto['Tipo']};{produto['Marca']};"
+                f"{produto['Categoria']};{produto['Quantidade']};"
+                f"{produto['Preço']};{produto['Status']}\n"
+            )
 
 
 opcoes_filtro = {
