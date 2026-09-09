@@ -2,7 +2,7 @@ from time import sleep
 from interface import menu, titulo, detalhes_produto, mostrar_resultados
 from consultas import escolher_filtros, filtrar_produtos
 from dados import carregar_estoque, salvar_estoque, opcoes_filtro, opcoes_alteracao
-from operacoes import inativar_produto, alterar_cadastro
+from operacoes import inativar_produto, alterar_cadastro, entrada_estoque
 
 filtros = {}
 
@@ -18,7 +18,11 @@ while True:
     opcao = menu(opcoes, 'SISTEMA DE ESTOQUE')
     escolha = 0
     if opcao == 1:
-        titulo(opcoes[0].upper())
+        modificacao = entrada_estoque(estoque)
+        if modificacao == 0:
+            salvar_estoque(estoque)
+        elif modificacao == -1:
+            continue
     elif opcao == 2:
         while True:
             if escolha == 4:

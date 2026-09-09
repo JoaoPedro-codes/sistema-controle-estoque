@@ -1,4 +1,5 @@
-from interface import leiaInt, limpar_tela, titulo
+from interface import limpar_tela, titulo
+from validacoes import leiaInt
 from dados import opcoes_status
 
 def filtrar_produtos(estoque, filtros):

@@ -1,7 +1,12 @@
 import os
+from validacoes import leiaInt
 
 def limpar_tela():
     os.system('cls' if os.name == 'nt' else 'clear')
+
+
+def formatarMoeda(valor):
+        return f'R$ {valor:.2f}'.replace('.', ',')
 
 
 def escreveLinha(num=42):
@@ -13,16 +18,6 @@ def titulo(msg):
     print(f'{msg:^42}')
     escreveLinha()
 
-
-def leiaInt(opc):
-    while True:
-        try:
-             opcao = int(input(opc)) 
-        except (ValueError, TypeError):
-            print('\nERRO: Por favor, digite apenas opções válidas!\n')
-        else:
-            return opcao
-        
 
 def menu(lista, msg):
     limpar_tela()
@@ -49,7 +44,10 @@ def detalhes_produto(dicio, codigo):
     print(f'{"Código:":<18}{codigo}')
     produto = dicio[codigo]
     for chave, valor in produto.items():
-        print(f'{(chave + ":"):<18}{valor}')
+        if chave == 'Preço':
+            print(f'{(chave + ":"):<18}{formatarMoeda(valor)}')
+        else:
+            print(f'{(chave + ":"):<18}{valor}')
     print()
 
     opcoes_tela = [
@@ -94,3 +92,17 @@ def mostrar_resultados(dicio, lista):
             opcao = leiaInt('Digite a númeração do produto para exibir detalhes [valor negativo = CANCELAR]: ')
         else:
             return lista[opcao-1]
+
+
+def exibir_produto(dicio, codigo):
+    limpar_tela()
+    titulo('DETALHES DO PRODUTO')
+    print()
+    print(f'{"Código:":<18}{codigo}')
+    produto = dicio[codigo]
+    for chave, valor in produto.items():
+        if chave == 'Preço':
+            print(f'{(chave + ":"):<18}{formatarMoeda(valor)}')
+        else:
+            print(f'{(chave + ":"):<18}{valor}')
+    print()
