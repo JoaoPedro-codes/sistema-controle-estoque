@@ -83,13 +83,13 @@ def mostrar_resultados(dicio, lista):
         c += 1  
         print()
 
-    opcao = leiaInt('Digite a númeração do produto para exibir detalhes [valor negativo = CANCELAR]: ')
+    opcao = leiaInt('Digite a númeração do produto para exibir detalhes [valor negativo = VOLTAR]: ')
     while True:
         if opcao < 0:
             return 0
         elif opcao > len(lista) or opcao == 0:
             print('\nERRO: Por favor, digite apenas opções válidas!\n')
-            opcao = leiaInt('Digite a númeração do produto para exibir detalhes [valor negativo = CANCELAR]: ')
+            opcao = leiaInt('Digite a númeração do produto para exibir detalhes [valor negativo = VOLTAR]: ')
         else:
             return lista[opcao-1]
 

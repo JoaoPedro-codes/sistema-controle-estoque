@@ -179,6 +179,7 @@ def operacao_entrada(estoque, codigo, entrada=None, novo_preco=None):
     while True:
         print()
         mudar_preco = input('Deseja atualizar o preço? [S/N]:\nR: ').strip().upper()
+        print()
         if mudar_preco not in ('S', 'N'):
             print('\nERRO: Digite apenas S ou N!\n')
             continue
@@ -298,5 +299,80 @@ def cadastrar_produto(estoque):
         estoque[codigo] = novo_produto
         print(f'\nProduto cadastrado com sucesso! Código: {codigo}')
         return 0
-    
 
+
+def saida_estoque(estoque):
+    while True:
+        limpar_tela()
+        titulo('SAÍDA DE ESTOQUE')
+        print()
+
+        while True:
+            codigo = leiaInt('Digite o código do produto [valor negativo = VOLTAR]: ')
+            if codigo < 0:
+                return -1
+
+            if codigo in estoque.keys():
+                if estoque[codigo]['Status'] == 'INATIVO':
+                    exibir_produto(estoque, codigo)
+                    print('PRODUTO INATIVO! Não é possível realizar saída desse produto.')
+                    input('\nPressione ENTER para continuar...')
+                    break
+                elif estoque[codigo]['Status'] == 'ESGOTADO':
+                    exibir_produto(estoque, codigo)
+                    print('PRODUTO ESGOTADO! Mercadoria sem estoque.')
+                    input('\nPressione ENTER para continuar...')
+                    break
+                else:
+                    exibir_produto(estoque, codigo)
+                    operacao_saida(estoque, codigo)
+                    return 0
+            else:
+                print('\nERRO: Digite um identificador válido!\n')
+                continue
+
+
+def operacao_saida(estoque, codigo):
+    while True:
+        saida = leiaInt('\nQuantidade de saída: ', '\nERRO: Digite um valor numérico válido!\n')
+        if saida <= 0:
+            print('\nERRO: O valor deve ser maior que zero!\n')
+            continue
+        if saida > estoque[codigo]['Quantidade']:
+            print('ERRO: A quantidade solicitada é maior que a disponível em estoque!')
+            print()
+            while True:
+                realizar_saida = input('Deseja retirar toda a quantidade disponível? [S/N]:\nR: ').strip().upper()
+                if realizar_saida not in ('S', 'N'):
+                    print('\nERRO: Digite apenas S ou N!\n')
+                    continue
+                if realizar_saida == 'S':
+                    saida = estoque[codigo]['Quantidade']
+                    break
+                else:
+                    print('\nInforme uma nova quantidade de saída.\n')
+                    break
+            if realizar_saida == 'S':
+                break
+            elif realizar_saida == 'N':
+                continue
+        else:
+            break
+
+    estoque[codigo]['Quantidade'] -= saida
+    if estoque[codigo]['Quantidade'] == 0:
+        estoque[codigo]['Status'] = 'ESGOTADO'
+
+    limpar_tela()
+    titulo('SAÍDA REALIZADA COM SUCESSO!')
+    print()
+    print(f'{"Saída realizada:":<20} -{saida}')
+    print(f'{"Quantidade atual:":<20} {estoque[codigo]['Quantidade']}')
+    print(f'{"Status:":<20} {estoque[codigo]['Status']}')
+    
+    input('\nPressione ENTER para continuar...')
+
+    return 0
+
+        
+            

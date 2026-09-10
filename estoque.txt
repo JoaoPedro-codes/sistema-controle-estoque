@@ -1,7 +1,8 @@
 1;Arroz;Camil;Alimentos;25;25.9;DISPONÍVEL
 2;Arroz;Tio João;Alimentos;15;28.5;DISPONÍVEL
-3;Feijão;Camil;Alimentos;5;9.9;DISPONÍVEL
+3;Feijão;Camil;Alimentos;20;8.9;DISPONÍVEL
 4;Detergente;Ypê;Limpeza;15;3.49;DISPONÍVEL
 5;Arroz;Prato Fino;Alimentos;10;23.9;DISPONÍVEL
-6;Macarrão;Barilla;Alimentos;30;8.5;DISPONÍVEL
-7;Café;Pilão;Alimentos;12;20.5;DISPONÍVEL
+6;Macarrão;Barilla;Alimentos;0;8.5;INATIVO
+7;Café;Pilão;Alimentos;6;20.5;DISPONÍVEL
+8;Chocolate;Garoto;Alimentos;30;8.49;DISPONÍVEL

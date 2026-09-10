@@ -2,7 +2,7 @@ from time import sleep
 from interface import menu, titulo, detalhes_produto, mostrar_resultados
 from consultas import escolher_filtros, filtrar_produtos
 from dados import carregar_estoque, salvar_estoque, opcoes_filtro, opcoes_alteracao
-from operacoes import inativar_produto, alterar_cadastro, entrada_estoque
+from operacoes import inativar_produto, alterar_cadastro, entrada_estoque, saida_estoque
 
 filtros = {}
 
@@ -92,7 +92,11 @@ while True:
                                         break
                             
     elif opcao == 3:
-        titulo(opcoes[2].upper())
+        modificacao = saida_estoque(estoque)
+        if modificacao == 0:
+            salvar_estoque(estoque)
+        elif modificacao == -1:
+            continue
     elif opcao == 4:
         print('Finalizando o programa...')
         break
