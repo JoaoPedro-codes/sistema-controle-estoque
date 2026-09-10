@@ -1,8 +1,8 @@
 from time import sleep
-from interface import menu, titulo, detalhes_produto, mostrar_resultados
+from interface import menu, detalhes_produto, mostrar_resultados
 from consultas import escolher_filtros, filtrar_produtos
 from dados import carregar_estoque, salvar_estoque, opcoes_filtro, opcoes_alteracao
-from operacoes import inativar_produto, alterar_cadastro, entrada_estoque, saida_estoque
+from operacoes import inativar_produto, alterar_cadastro, entrada_estoque, saida_estoque, zerar_para_inativar
 
 filtros = {}
 
@@ -48,14 +48,19 @@ while True:
                                 if opcoes_alterar == 0:
                                     salvar_estoque(estoque)
                             if escolha == 2:
-                                inativo = inativar_produto(estoque, codigos[0])
-                                if inativo == 0:
-                                    print('Ir para saída de estoque')
-                                elif inativo == 1:
-                                    salvar_estoque(estoque)
-                                    continue
-                                elif inativo == 2:
-                                    continue
+                                while True:
+                                    inativo = inativar_produto(estoque, codigos[0])
+                                    if inativo == 0:
+                                        zerar = zerar_para_inativar(estoque, codigos[0])
+                                        if zerar == 0:
+                                            continue
+                                        elif zerar == -1:
+                                            break
+                                    elif inativo == 1:
+                                        salvar_estoque(estoque)
+                                        break
+                                    elif inativo == 2:
+                                        break
                             elif escolha == 3:
                                 break
                             elif escolha == 4:
@@ -78,14 +83,19 @@ while True:
                                         if opcoes_alterar == 0:
                                             salvar_estoque(estoque)
                                     elif escolha == 2:
-                                        inativo = inativar_produto(estoque, retorno)
-                                        if inativo == 0:
-                                            print('Ir para saída de estoque')
-                                        elif inativo == 1:
-                                            salvar_estoque(estoque)
-                                            continue
-                                        elif inativo == 2:
-                                            continue
+                                        while True:
+                                            inativo = inativar_produto(estoque, retorno)
+                                            if inativo == 0:
+                                                zerar = zerar_para_inativar(estoque, retorno)
+                                                if zerar == 0:
+                                                    continue
+                                                elif zerar == -1:
+                                                    break
+                                            elif inativo == 1:
+                                                salvar_estoque(estoque)
+                                                break
+                                            elif inativo == 2:
+                                                break
                                     elif escolha == 3:
                                         break
                                     elif escolha == 4:

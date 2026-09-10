@@ -4,10 +4,7 @@ from validacoes import leiaTexto, leiaFloat, leiaIntOpcional, leiaInt
 
 def inativar_produto(dicio, codigo):
     if dicio[codigo]['Quantidade'] > 0:
-        print('Não é possível inativar esse produto.')
-        print(f'Ainda existem {dicio[codigo]['Quantidade']} unidades em estoque.')
-        print('\nRealize a saída  do estoque antes de inativá-lo.')
-        input('\nPressione ENTER para continuar...')
+        print(f'Não é possível inativar esse produto. Ainda existem {dicio[codigo]['Quantidade']} unidades em estoque!')
         return 0
     elif dicio[codigo]['Quantidade'] == 0:
         while True:
@@ -374,5 +371,30 @@ def operacao_saida(estoque, codigo):
 
     return 0
 
-        
-            
+
+def zerar_para_inativar(estoque, codigo):
+    while True:
+        realizar_saida = input('\nDeseja realizar a saída de toda quantidade disponível? [S/N]:\nR: ').strip().upper()
+        if realizar_saida not in ('S', 'N'):
+            print('\nERRO: Digite apenas S ou N!\n')
+            continue
+        if realizar_saida == 'S':
+            saida = estoque[codigo]['Quantidade']
+            break
+        else:
+            print('\nOperação cancelada.')
+            sleep(2)
+            return -1
+
+    estoque[codigo]['Quantidade'] -= saida
+    estoque[codigo]['Status'] = 'ESGOTADO'
+
+    limpar_tela()
+    titulo('SAÍDA REALIZADA COM SUCESSO!')
+    print()
+    print(f'{"Saída realizada:":<20} -{saida}')
+    print(f'{"Quantidade atual:":<20} {estoque[codigo]['Quantidade']}')
+    print(f'{"Status:":<20} {estoque[codigo]['Status']}')
+    print()
+
+    return 0
