@@ -216,7 +216,11 @@ def cadastrar_produto(estoque):
     print()
 
     entrada = -1
-    codigo = len(estoque) + 1
+    
+    if len(estoque) == 0:
+        codigo = 1
+    else:
+        codigo = max(estoque.keys()) + 1
 
     novo_produto = {
     'Tipo': '',
