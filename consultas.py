@@ -39,11 +39,8 @@ def escolher_filtros(possibilidades, msg, msg_opcao):
     print()
     while True:
         escolha = input(msg_opcao)
-        escolha_com_espaco = escolha.replace(',', ' ')
-        escolha_separada = escolha_com_espaco.split()
+        escolha_separada = escolha.replace(',', ' ').split()
         escolhaInt = []
-        escolhas_lista = []
-        escolhas = {}
         valido = True
 
         if not escolha_separada:
@@ -51,9 +48,9 @@ def escolher_filtros(possibilidades, msg, msg_opcao):
             valido = False
 
         if valido:
-            for i in range(0, len(escolha_separada)):
+            for escolha in escolha_separada:
                 try:
-                    filtro = int(escolha_separada[i])
+                    filtro = int(escolha)
                 except (ValueError, TypeError):
                     print('\nERRO: Por favor, digite apenas opções válidas!\n')
                     valido = False
@@ -62,32 +59,29 @@ def escolher_filtros(possibilidades, msg, msg_opcao):
                     escolhaInt.append(filtro)
 
         if valido:
-                for v in escolhaInt:
-                    if v not in [0, 1, 2, 3, 4, 5]:
-                        print('\nERRO: Por favor, digite apenas opções válidas!\n')
-                        valido = False
-                        break
-                if len(escolhaInt) == 1 and escolhaInt[0] == 5:
-                    return 5
-                else:
-                    if len(escolhaInt) > 1 and 5 in escolhaInt:
-                        print('\nERRO: Por favor, digite apenas opções válidas!\n')
-                        valido = False
-                if len(escolhaInt) == 1 and escolhaInt[0] == 0:
-                    return {}
-                else:
-                    if len(escolhaInt) > 1 and 0 in escolhaInt:
-                        print('\nERRO: Por favor, digite apenas opções válidas!\n')
-                        valido = False
+            for v in escolhaInt:
+                if v not in (0, 1, 2, 3, 4, 5):
+                    print('\nERRO: Por favor, digite apenas opções válidas!\n')
+                    valido = False
+                    break
+            if len(escolhaInt) == 1 and escolhaInt[0] == 5:
+                return 5
+            if len(escolhaInt) > 1 and 5 in escolhaInt:
+                print('\nERRO: Por favor, digite apenas opções válidas!\n')
+                valido = False
+            if len(escolhaInt) == 1 and escolhaInt[0] == 0:
+                return {}
+            if len(escolhaInt) > 1 and 0 in escolhaInt:
+                print('\nERRO: Por favor, digite apenas opções válidas!\n')
+                valido = False
         
         if valido:
             break
 
+    escolhas = {}
+
     for num in escolhaInt:
-        escolhas_lista.append(possibilidades[num])
-       
-    for valor in escolhas_lista:
-        escolhas[valor] = ''
+        escolhas[possibilidades[num]] = ''
 
     limpar_tela()
 

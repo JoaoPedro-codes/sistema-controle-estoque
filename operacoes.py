@@ -1,26 +1,22 @@
 from time import sleep
 from interface import limpar_tela, titulo, formatarMoeda, exibir_produto
-from validacoes import leiaTexto, leiaFloat, leiaIntOpcional, leiaInt
+from validacoes import leiaTexto, leiaFloat, leiaIntOpcional, leiaInt, leiaSimNao
 
-def inativar_produto(dicio, codigo):
-    if dicio[codigo]['Quantidade'] > 0:
-        print(f'Não é possível inativar esse produto. Ainda existem {dicio[codigo]['Quantidade']} unidades em estoque!')
+def inativar_produto(estoque, codigo):
+    if estoque[codigo]['Quantidade'] > 0:
+        print(f'Não é possível inativar esse produto. Ainda existem {estoque[codigo]['Quantidade']} unidades em estoque!')
         return 0
-    elif dicio[codigo]['Quantidade'] == 0:
-        while True:
-            inativar = input('Deseja realmente inativar esse produto? [S/N]:\nR: ').strip().upper()
-            if inativar not in ('S', 'N'):
-                print('\nERRO: Digite apenas S ou N!\n')
-                continue
-            if inativar == 'S':
-                dicio[codigo]['Status'] = 'INATIVO'
-                print('\nProduto inativado com sucesso!')
-                input('\nPressione ENTER para continuar...')
-                return 1
-            else:
-                print('\nOperação cancelada.')
-                sleep(2)
-                return 2
+    elif estoque[codigo]['Quantidade'] == 0:
+        inativar = leiaSimNao('Deseja realmente inativar esse produto? [S/N]:\nR: ')
+        if inativar == 'S':
+            estoque[codigo]['Status'] = 'INATIVO'
+            print('\nProduto inativado com sucesso!')
+            input('\nPressione ENTER para continuar...')
+            return 1
+        else:
+            print('\nOperação cancelada.')
+            sleep(2)
+            return 2
 
 
 def alterar_cadastro(possibilidades, msg, msg_opcao, estoque, codigo):
@@ -36,12 +32,8 @@ def alterar_cadastro(possibilidades, msg, msg_opcao, estoque, codigo):
     print()
     while True:
         escolha = input(msg_opcao)
-        escolha_com_espaco = escolha.replace(',', ' ')
-        escolha_separada = escolha_com_espaco.split()
+        escolha_separada = escolha.replace(',', ' ').split()
         escolhaInt = []
-        escolhas_lista = []
-        validacao_mudanca = []
-        mudancas = {}
         valido = True
 
         if not escolha_separada:
@@ -49,44 +41,44 @@ def alterar_cadastro(possibilidades, msg, msg_opcao, estoque, codigo):
             valido = False
 
         if valido:
-            for i in range(0, len(escolha_separada)):
+            for escolha in escolha_separada:
                 try:
-                    filtro = int(escolha_separada[i])
+                    filtro = int(escolha)
                 except (ValueError, TypeError):
                     print('\nERRO: Por favor, digite apenas opções válidas!\n')
                     valido = False
                     break
-                else:  
+                else:
                     escolhaInt.append(filtro)
 
         if valido:
-                for v in escolhaInt:
-                    if v not in [0, 1, 2, 3, 4, 5]:
-                        print('\nERRO: Por favor, digite apenas opções válidas!\n')
-                        valido = False
-                        break
-                if len(escolhaInt) == 1 and escolhaInt[0] == 5:
-                    return 5
-                else:
-                    if len(escolhaInt) > 1 and 5 in escolhaInt:
-                        print('\nERRO: Por favor, digite apenas opções válidas!\n')
-                        valido = False
-                if len(escolhaInt) == 1 and escolhaInt[0] == 0:
-                    escolhaInt = [1, 2, 3, 4]
-                else:
-                    if len(escolhaInt) > 1 and 0 in escolhaInt:
-                        print('\nERRO: Por favor, digite apenas opções válidas!\n')
-                        valido = False
-        
+            for v in escolhaInt:
+                if v not in (0, 1, 2, 3, 4, 5):
+                    print('\nERRO: Por favor, digite apenas opções válidas!\n')
+                    valido = False
+                    break
+            if len(escolhaInt) == 1 and escolhaInt[0] == 5:
+                return 5
+            
+            if len(escolhaInt) > 1 and 5 in escolhaInt:
+                print('\nERRO: Por favor, digite apenas opções válidas!\n')
+                valido = False
+                
+            if len(escolhaInt) == 1 and escolhaInt[0] == 0:
+                escolhaInt = [1, 2, 3, 4]
+            
+            if len(escolhaInt) > 1 and 0 in escolhaInt:
+                print('\nERRO: Por favor, digite apenas opções válidas!\n')
+                valido = False
+
         if valido:
             break
 
-    for num in escolhaInt:
-        escolhas_lista.append(possibilidades[num])
-        
-    for valor in escolhas_lista:
-        mudancas[valor] = ''
+    mudancas = {}
 
+    for num in escolhaInt:
+        mudancas[possibilidades[num]] = ''
+        
     limpar_tela()
 
     for campo in mudancas:
@@ -108,7 +100,7 @@ def alterar_cadastro(possibilidades, msg, msg_opcao, estoque, codigo):
     for cod, produto in estoque.items():
         if cod == codigo:
             continue
-        elif tipo_final.upper() == produto['Tipo'].upper() and marca_final.upper() == produto['Marca'].upper():
+        if tipo_final.upper() == produto['Tipo'].upper() and marca_final.upper() == produto['Marca'].upper():
             print()
             print('A tentativa de alteração falhou. Já existe um produto com essas características no banco de dados!')
             sleep(4)
@@ -134,27 +126,23 @@ def entrada_estoque(estoque):
             cadastro = cadastrar_produto(estoque)
             return cadastro
         else:
-            if codigo in estoque.keys():
+            if codigo in estoque:
                 if estoque[codigo]['Status'] == 'INATIVO':
-                    while True:
-                        print()
-                        reativar = input('PRODUTO INATIVO! Deseja reativar esse produto? [S/N]:\nR: ').strip().upper()
-                        if reativar not in ('S', 'N'):
-                            print('\nERRO: Digite apenas S ou N!\n')
+                    print()
+                    reativar = leiaSimNao('PRODUTO INATIVO! Deseja reativar esse produto? [S/N]:\nR: ')
+                    if reativar == 'S':
+                        exibir_produto(estoque, codigo)
+                        entrada = operacao_entrada(estoque, codigo)
+                        if entrada == -1:
+                            limpar_tela()
+                            titulo('ENTRADA DE ESTOQUE')
+                            print()
                             continue
-                        if reativar == 'S':
-                            exibir_produto(estoque, codigo)
-                            entrada = operacao_entrada(estoque, codigo)
-                            if entrada == -1:
-                                limpar_tela()
-                                titulo('ENTRADA DE ESTOQUE')
-                                print()
-                                break
-                            return entrada
-                        else:
-                            print('\nOperação cancelada.')
-                            sleep(2)
-                            break
+                        return entrada
+                    else:
+                        print('\nOperação cancelada.')
+                        sleep(2)
+                        continue
                 else:
                     exibir_produto(estoque, codigo)
                     entrada = operacao_entrada(estoque, codigo)
@@ -184,21 +172,13 @@ def operacao_entrada(estoque, codigo, entrada=None, novo_preco=None):
 
     print(f"Preço atual: {formatarMoeda(estoque[codigo]['Preço'])}")
     atualizar_preco = False
+    print()
 
-    while True:
-        print()
-        mudar_preco = input('Deseja atualizar o preço? [S/N]:\nR: ').strip().upper()
-        print()
-        if mudar_preco not in ('S', 'N'):
-            print('\nERRO: Digite apenas S ou N!\n')
-            continue
-        if mudar_preco == 'S':
-            if novo_preco is None:
-                novo_preco = leiaFloat('Digite o novo preço: R$')
-            atualizar_preco = True
-            break
-        elif mudar_preco == 'N':
-            break
+    mudar_preco = leiaSimNao('Deseja atualizar o preço? [S/N]:\nR: ')
+    if mudar_preco == 'S':
+        if novo_preco is None:
+            novo_preco = leiaFloat('Digite o novo preço: R$')
+        atualizar_preco = True
 
     reativacao = estoque[codigo]['Status'] == "INATIVO"
         
@@ -241,15 +221,14 @@ def cadastrar_produto(estoque):
     'Status': ''
  }
 
-    for campo in novo_produto.keys():
+    for campo in novo_produto:
         if campo == 'Quantidade':
             while True:
                 novo_produto[campo] = leiaInt(f'{campo}: ')
                 if novo_produto[campo] < 0:
                     print('\nERRO: O valor não pode ser negativo!\n')
                     continue
-                else:
-                    break
+                break
         elif campo == 'Preço':
             novo_produto[campo] = leiaFloat(f'{campo}: ')
         elif campo == 'Status':
@@ -275,42 +254,33 @@ def cadastrar_produto(estoque):
 
     if cadastrado:
         if estoque[cod_existente]['Status'] != 'INATIVO':
-            while True:
-                print()
-                realizar_entrada = input('Deseja realizar uma entrada de estoque? [S/N]:\nR: ').strip().upper()
-                if realizar_entrada not in ('S', 'N'):
-                    print('\nERRO: Digite apenas S ou N!\n')
-                    continue
-                if realizar_entrada == 'S':
-                    exibir_produto(estoque, cod_existente)
-                    entrada = operacao_entrada(estoque, cod_existente, novo_produto['Quantidade'], novo_produto['Preço'])
-                    return entrada
-                else:
-                    print('\nOperação encerrada.')
-                    sleep(2)
-                    return -1
+            print()
+            realizar_entrada = leiaSimNao('Deseja realizar uma entrada de estoque? [S/N]:\nR: ')
+            if realizar_entrada == 'S':
+                exibir_produto(estoque, cod_existente)
+                entrada = operacao_entrada(estoque, cod_existente, novo_produto['Quantidade'], novo_produto['Preço'])
+                return entrada
+            else:
+                print('\nOperação encerrada.')
+                sleep(2)
+                return -1
 
         else:
-            while True:
-                print()
-                reativar = input('PRODUTO INATIVO! Deseja reativar esse produto? [S/N]:\nR: ').strip().upper()
-                if reativar not in ('S', 'N'):
-                    print('\nERRO: Digite apenas S ou N!\n')
-                    continue
-                if reativar == 'S':
-                    exibir_produto(estoque, cod_existente)
-                    entrada = operacao_entrada(estoque, cod_existente, novo_produto['Quantidade'], novo_produto['Preço'])
-                    return entrada
-                else:
-                    print('\nOperação cancelada.')
-                    sleep(2)
-                    return -1
+            print()
+            reativar = leiaSimNao('PRODUTO INATIVO! Deseja reativar esse produto? [S/N]:\nR: ')
+            if reativar == 'S':
+                exibir_produto(estoque, cod_existente)
+                entrada = operacao_entrada(estoque, cod_existente, novo_produto['Quantidade'], novo_produto['Preço'])
+                return entrada
+            else:
+                print('\nOperação cancelada.')
+                sleep(2)
+                return -1
 
-    if not cadastrado:
-        estoque[codigo] = novo_produto
-        exibir_produto(estoque, codigo, 'CADASTRO REALIZADO COM SUCESSO!')
-        input('Pressione ENTER para continuar...')
-        return 0
+    estoque[codigo] = novo_produto
+    exibir_produto(estoque, codigo, 'CADASTRO REALIZADO COM SUCESSO!')
+    input('Pressione ENTER para continuar...')
+    return 0
 
 
 def saida_estoque(estoque):
@@ -324,7 +294,7 @@ def saida_estoque(estoque):
             if codigo < 0:
                 return -1
 
-            if codigo in estoque.keys():
+            if codigo in estoque:
                 if estoque[codigo]['Status'] == 'INATIVO':
                     exibir_produto(estoque, codigo)
                     print('PRODUTO INATIVO! Não é possível realizar saída desse produto.')
@@ -357,20 +327,12 @@ def operacao_saida(estoque, codigo):
         if saida > estoque[codigo]['Quantidade']:
             print('\nERRO: A quantidade solicitada é maior que a disponível em estoque!')
             print()
-            while True:
-                realizar_saida = input('Deseja retirar toda a quantidade disponível? [S/N]:\nR: ').strip().upper()
-                if realizar_saida not in ('S', 'N'):
-                    print('\nERRO: Digite apenas S ou N!\n')
-                    continue
-                if realizar_saida == 'S':
-                    saida = estoque[codigo]['Quantidade']
-                    break
-                else:
-                    print('\nInforme uma nova quantidade de saída.')
-                    break
+            realizar_saida = leiaSimNao('Deseja retirar toda a quantidade disponível? [S/N]:\nR: ')
             if realizar_saida == 'S':
+                saida = estoque[codigo]['Quantidade']
                 break
-            elif realizar_saida == 'N':
+            else:
+                print('\nInforme uma nova quantidade de saída.')
                 continue
         else:
             break
@@ -392,18 +354,13 @@ def operacao_saida(estoque, codigo):
 
 
 def zerar_para_inativar(estoque, codigo):
-    while True:
-        realizar_saida = input('\nDeseja realizar a saída de toda quantidade disponível? [S/N]:\nR: ').strip().upper()
-        if realizar_saida not in ('S', 'N'):
-            print('\nERRO: Digite apenas S ou N!\n')
-            continue
-        if realizar_saida == 'S':
-            saida = estoque[codigo]['Quantidade']
-            break
-        else:
-            print('\nOperação cancelada.')
-            sleep(2)
-            return -1
+    realizar_saida = leiaSimNao('\nDeseja realizar a saída de toda quantidade disponível? [S/N]:\nR: ')
+    if realizar_saida == 'S':
+        saida = estoque[codigo]['Quantidade']
+    else:
+        print('\nOperação cancelada.')
+        sleep(2)
+        return -1
 
     estoque[codigo]['Quantidade'] -= saida
     estoque[codigo]['Status'] = 'ESGOTADO'

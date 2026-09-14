@@ -7,8 +7,8 @@ def leiaTexto(msg):
         if ';' in texto:
             print('\nERRO: O caractere ";" não é permitido!\n')
             continue
-        else:
-            return texto
+
+        return texto
 
 
 def leiaFloat(valor):
@@ -19,7 +19,7 @@ def leiaFloat(valor):
             print('\nERRO: Digite um valor numérico válido!\n')
         else:
             if quantia <= 0:
-                print('\nERRO: O valor não pode ser zero \n')
+                print('\nERRO: O valor deve ser maior que zero\n')
             else:
                 return quantia
 
@@ -45,4 +45,14 @@ def leiaIntOpcional(opc):
             print('\nERRO: Por favor, digite apenas opções válidas!\n')
         else:
             return opcao
-        
+
+
+def leiaSimNao(msg):
+    while True:
+        resposta = input(msg).strip().upper()
+
+        if resposta not in ('S', 'N'):
+            print('\nERRO: Digite apenas S ou N!\n')
+            continue
+
+        return resposta

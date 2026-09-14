@@ -6,7 +6,7 @@ def limpar_tela():
 
 
 def formatarMoeda(valor):
-        return f'R$ {valor:.2f}'.replace('.', ',')
+    return f'R$ {valor:.2f}'.replace('.', ',')
 
 
 def escreveLinha(num=42):
@@ -37,12 +37,12 @@ def menu(lista, msg):
             return opcao
 
 
-def detalhes_produto(dicio, codigo):
+def detalhes_produto(estoque, codigo):
     limpar_tela()
     titulo('DETALHES DO PRODUTO')
     print()
     print(f'{"Código:":<18}{codigo}')
-    produto = dicio[codigo]
+    produto = estoque[codigo]
     for chave, valor in produto.items():
         if chave == 'Preço':
             print(f'{(chave + ":"):<18}{formatarMoeda(valor)}')
@@ -71,15 +71,15 @@ def detalhes_produto(dicio, codigo):
             return opcao
 
 
-def mostrar_resultados(dicio, lista):
+def mostrar_resultados(estoque, lista):
     limpar_tela()
     titulo('PRODUTOS ENCONTRADOS')
     print()
     c = 1
     for codigo in lista:
         print(f'[{c}] Código {codigo} => ', end=' ')
-        print(f'Tipo: {dicio[codigo]["Tipo"]}', end=' | ') 
-        print(f'Marca: {dicio[codigo]["Marca"]}') 
+        print(f'Tipo: {estoque[codigo]["Tipo"]}', end=' | ') 
+        print(f'Marca: {estoque[codigo]["Marca"]}') 
         c += 1  
         print()
 
@@ -94,12 +94,12 @@ def mostrar_resultados(dicio, lista):
             return lista[opcao-1]
 
 
-def exibir_produto(dicio, codigo, msg='DETALHES DO PRODUTO'):
+def exibir_produto(estoque, codigo, msg='DETALHES DO PRODUTO'):
     limpar_tela()
     titulo(msg)
     print()
     print(f'{"Código:":<18}{codigo}')
-    produto = dicio[codigo]
+    produto = estoque[codigo]
     for chave, valor in produto.items():
         if chave == 'Preço':
             print(f'{(chave + ":"):<18}{formatarMoeda(valor)}')
