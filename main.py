@@ -13,6 +13,9 @@ opcoes = [
     'Sair'
 ]
 estoque = carregar_estoque()
+if estoque is None:
+    print('Não foi possível carregar o estoque. Encerrando o programa...\n')
+    exit()
 
 while True:
     opcao = menu(opcoes, 'SISTEMA DE ESTOQUE')
@@ -108,6 +111,6 @@ while True:
         elif modificacao == -1:
             continue
     elif opcao == 4:
-        print('Finalizando o programa...')
+        print('\nFinalizando o programa...\n')
         break
     

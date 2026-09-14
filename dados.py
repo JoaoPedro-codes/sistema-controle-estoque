@@ -1,8 +1,13 @@
+import os
+
+pasta_atual = os.path.dirname(os.path.abspath(__file__))
+caminho_estoque = os.path.join(pasta_atual, 'estoque.txt')
+
 def carregar_estoque():
     estoque = {}
 
     try:
-        with open('estoque.txt', 'r', encoding='utf-8') as arquivo:
+        with open(caminho_estoque, 'r', encoding='utf-8') as arquivo:
             for linha in arquivo:
                 termos = linha.strip().split(';')
                 
@@ -19,6 +24,10 @@ def carregar_estoque():
                     'Status': termos[6]
                 }
 
+    except (ValueError, IndexError):
+        print('\nERRO: O arquivo de estoque está corrompido!\n')
+        return None
+
     except FileNotFoundError:
         pass
 
@@ -26,7 +35,7 @@ def carregar_estoque():
 
 
 def salvar_estoque(estoque):
-    with open('estoque.txt', 'w', encoding='utf-8') as arquivo:
+    with open(caminho_estoque, 'w', encoding='utf-8') as arquivo:
         for codigo, produto in estoque.items():
             arquivo.write(
                 f"{codigo};{produto['Tipo']};{produto['Marca']};"

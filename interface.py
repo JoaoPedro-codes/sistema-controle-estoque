@@ -94,9 +94,9 @@ def mostrar_resultados(dicio, lista):
             return lista[opcao-1]
 
 
-def exibir_produto(dicio, codigo):
+def exibir_produto(dicio, codigo, msg='DETALHES DO PRODUTO'):
     limpar_tela()
-    titulo('DETALHES DO PRODUTO')
+    titulo(msg)
     print()
     print(f'{"Código:":<18}{codigo}')
     produto = dicio[codigo]

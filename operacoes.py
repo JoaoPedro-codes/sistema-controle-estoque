@@ -108,11 +108,10 @@ def alterar_cadastro(possibilidades, msg, msg_opcao, estoque, codigo):
     for cod, produto in estoque.items():
         if cod == codigo:
             continue
-        elif tipo_final == produto['Tipo'] and marca_final == produto['Marca']:
+        elif tipo_final.upper() == produto['Tipo'].upper() and marca_final.upper() == produto['Marca'].upper():
             print()
-            print('A tentativa de alteração falhou.')
-            print('Já existe um produto com essas características no banco de dados!')
-            sleep(3)
+            print('A tentativa de alteração falhou. Já existe um produto com essas características no banco de dados!')
+            sleep(4)
             return 5
 
     for campo, informacao in mudancas.items():
@@ -125,8 +124,6 @@ def entrada_estoque(estoque):
     limpar_tela()
     titulo('ENTRADA DE ESTOQUE')
     print()
-
-    entrada = -1
 
     while True:
         codigo = leiaIntOpcional('Digite o código do produto [ENTER = NOVO CADASTRO | valor negativo = VOLTAR]: ')
@@ -148,14 +145,24 @@ def entrada_estoque(estoque):
                         if reativar == 'S':
                             exibir_produto(estoque, codigo)
                             entrada = operacao_entrada(estoque, codigo)
+                            if entrada == -1:
+                                limpar_tela()
+                                titulo('ENTRADA DE ESTOQUE')
+                                print()
+                                break
                             return entrada
                         else:
                             print('\nOperação cancelada.')
                             sleep(2)
-                            return entrada
+                            break
                 else:
                     exibir_produto(estoque, codigo)
                     entrada = operacao_entrada(estoque, codigo)
+                    if entrada == -1:
+                        limpar_tela()
+                        titulo('ENTRADA DE ESTOQUE')
+                        print()
+                        continue
                     return entrada
             else:
                 print('\nERRO: Digite um identificador válido!\n')
@@ -163,11 +170,16 @@ def entrada_estoque(estoque):
 
 
 def operacao_entrada(estoque, codigo, entrada=None, novo_preco=None):
-    if entrada is None:
-        entrada = leiaInt('Quantidade de entrada: ', '\nERRO: Digite um valor numérico válido!\n')
-    while entrada <= 0:
-        print('\nERRO: O valor deve ser maior que zero!\n')
-        entrada = leiaInt('Quantidade de entrada: ', '\nERRO: Digite um valor numérico válido!\n')
+    while True:
+        if entrada is None:
+            entrada = leiaInt('Quantidade de entrada [valor negativo = CANCELAR]: ', '\nERRO: Digite um valor numérico válido!\n')
+        if entrada < 0:
+            return -1
+        if entrada == 0:
+            print('\nERRO: O valor deve ser maior que zero!\n')
+            entrada = None
+            continue
+        break
     print()
 
     print(f"Preço atual: {formatarMoeda(estoque[codigo]['Preço'])}")
@@ -192,7 +204,7 @@ def operacao_entrada(estoque, codigo, entrada=None, novo_preco=None):
         
     estoque[codigo]['Quantidade'] += entrada
     estoque[codigo]['Status'] = 'DISPONÍVEL'
-    if atualizar_preco:
+    if atualizar_preco:     
         estoque[codigo]['Preço'] = novo_preco
 
     limpar_tela()
@@ -214,8 +226,6 @@ def cadastrar_produto(estoque):
     limpar_tela()
     titulo('CADASTRO DE PRODUTO')
     print()
-
-    entrada = -1
     
     if len(estoque) == 0:
         codigo = 1
@@ -256,7 +266,7 @@ def cadastrar_produto(estoque):
     cod_existente = 0
     
     for cod, produto in estoque.items():
-        if tipo_final == produto['Tipo'] and marca_final == produto['Marca']:
+        if tipo_final.upper() == produto['Tipo'].upper() and marca_final.upper() == produto['Marca'].upper():
             print()
             print(f'Produto já cadastrado! Código: {cod}')
             cadastrado = True
@@ -278,7 +288,7 @@ def cadastrar_produto(estoque):
                 else:
                     print('\nOperação encerrada.')
                     sleep(2)
-                    return entrada
+                    return -1
 
         else:
             while True:
@@ -294,11 +304,12 @@ def cadastrar_produto(estoque):
                 else:
                     print('\nOperação cancelada.')
                     sleep(2)
-                    return entrada
+                    return -1
 
     if not cadastrado:
         estoque[codigo] = novo_produto
-        print(f'\nProduto cadastrado com sucesso! Código: {codigo}')
+        exibir_produto(estoque, codigo, 'CADASTRO REALIZADO COM SUCESSO!')
+        input('Pressione ENTER para continuar...')
         return 0
 
 
@@ -326,8 +337,10 @@ def saida_estoque(estoque):
                     break
                 else:
                     exibir_produto(estoque, codigo)
-                    operacao_saida(estoque, codigo)
-                    return 0
+                    saida = operacao_saida(estoque, codigo)
+                    if saida == -1:
+                        break
+                    return saida
             else:
                 print('\nERRO: Digite um identificador válido!\n')
                 continue
@@ -335,12 +348,14 @@ def saida_estoque(estoque):
 
 def operacao_saida(estoque, codigo):
     while True:
-        saida = leiaInt('\nQuantidade de saída: ', '\nERRO: Digite um valor numérico válido!\n')
-        if saida <= 0:
+        saida = leiaInt('\nQuantidade de saída [valor negativo = CANCELAR]: ', '\nERRO: Digite um valor numérico válido!\n')
+        if saida < 0:
+            return -1
+        if saida == 0:
             print('\nERRO: O valor deve ser maior que zero!\n')
             continue
         if saida > estoque[codigo]['Quantidade']:
-            print('ERRO: A quantidade solicitada é maior que a disponível em estoque!')
+            print('\nERRO: A quantidade solicitada é maior que a disponível em estoque!')
             print()
             while True:
                 realizar_saida = input('Deseja retirar toda a quantidade disponível? [S/N]:\nR: ').strip().upper()
@@ -351,7 +366,7 @@ def operacao_saida(estoque, codigo):
                     saida = estoque[codigo]['Quantidade']
                     break
                 else:
-                    print('\nInforme uma nova quantidade de saída.\n')
+                    print('\nInforme uma nova quantidade de saída.')
                     break
             if realizar_saida == 'S':
                 break

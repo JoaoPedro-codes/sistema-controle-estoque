@@ -4,6 +4,9 @@ def leiaTexto(msg):
         if not texto:
             print('\nERRO: Esse campo não pode estar vazio ou conter apenas espaços!\n')
             continue
+        if ';' in texto:
+            print('\nERRO: O caractere ";" não é permitido!\n')
+            continue
         else:
             return texto
 
